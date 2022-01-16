@@ -1,0 +1,52 @@
+/* @import "~antd/dist/antd.css"; */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body::-webkit-scrollbar {
+  display: none;
+}
+*::-webkit-scrollbar {
+  background-color: transparent;
+  width: 2px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #666565;
+  border-radius: 2px;
+}
+* {
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+.switch-wrapper {
+  position: relative;
+}
+
+.switch-wrapper > div {
+  position: absolute;
+}
+
+.microsoft-bg {
+  background-image: url(https://logincdn.msauth.net/shared/1.0/content/images/backgrounds/2_bc3d32a696895f78c19df6c717586a5d.svg);
+}
+.bg-gradient {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+}
+.dyn-bg {
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

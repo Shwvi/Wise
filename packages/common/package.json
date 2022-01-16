@@ -1,0 +1,14 @@
+{
+  "name": "@wise/common",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "4.5.4"
+  }
+}

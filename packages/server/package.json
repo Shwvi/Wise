@@ -1,0 +1,32 @@
+{
+  "name": "@wise/server",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "dev": "cross-env APPENV=DEV nodemon .",
+    "start": "nodemon ."
+  },
+  "devDependencies": {
+    "typescript": "4.5.4",
+    "@types/koa": "2.13.4",
+    "@types/koa-cors": "0.0.2",
+    "@types/koa-router": "7.4.4",
+    "@types/koa-bodyparser": "4.3.5",
+    "@types/uuid": "8.3.4",
+    "@wise/common": "1.0.0"
+  },
+  "dependencies": {
+    "uuid": "8.3.2",
+    "sequelize": "6.13.0",
+    "pg": "8.7.1",
+    "pg-hstore": "2.3.4",
+    "koa": "2.13.4",
+    "koa-bodyparser": "4.3.0",
+    "koa-router": "10.1.1",
+    "koa-cors": "0.0.16"
+  }
+}
