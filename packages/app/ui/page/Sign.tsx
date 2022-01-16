@@ -5,14 +5,14 @@ import KeyboardDoubleArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardDou
 import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSetRecoilState } from "recoil";
-import { UserState } from "../state/core/user";
+import { SetUserState } from "../state/core/user";
 import { patchToken, signUp } from "@/api/request";
 
 export function Sign() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const setUserInfo = useSetRecoilState(UserState);
+  const setUserInfo = useSetRecoilState(SetUserState);
   const ref = useRef<HTMLButtonElement | null>(null);
   const trySignIn = useCallback(async () => {
     setLoading(true);

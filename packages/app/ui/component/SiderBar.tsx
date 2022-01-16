@@ -1,14 +1,25 @@
 import { KeyboardArrowDown } from "@mui/icons-material";
-import { Button, Collapse, Divider, List, ListItemButton } from "@mui/material";
+import {
+  Button,
+  Collapse,
+  Divider,
+  IconButton,
+  InputBase,
+  List,
+  ListItemButton,
+  Paper,
+} from "@mui/material";
 import React, { ReactNode, useCallback, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
+import LoopSharpIcon from "@mui/icons-material/LoopSharp";
 import styles from "./siderbar.less";
 import { DocNodeState, usePopPathStack } from "../state/core";
 import { createNode, deleteNode } from "../../api/request";
 import { useRecoilCallback, useRecoilValue } from "recoil";
 import { FallBack } from "./Fallbacks";
 import { INode } from "@wise/common";
-import { LoadingButton } from "@mui/lab";
+
 function DocNodeButton({
   nodeId,
   removeNode,
@@ -25,12 +36,12 @@ function DocNodeButton({
       >
         {node.props.name}
       </span>
-      <Button
+      {/* <Button
         color={node.props.isDeleted ? undefined : "error"}
         onClick={() => removeNode(nodeId)}
       >
         {node.props.isDeleted ? "Undel" : "Del"}
-      </Button>
+      </Button> */}
     </SiderButton>
   );
 }
@@ -116,12 +127,29 @@ export function SiderBar({ node }: { node: INode }) {
       >
         {open && (
           <>
-            <div className="w-full flex">
-              <LoadingButton onClick={addNode} loading={adding}>
-                <AddIcon />
-              </LoadingButton>
+            <div className="w-full flex justify-center">
+              <div className="flex items-center w-11/12">
+                <Paper sx={{ display: "flex" }}>
+                  <InputBase
+                    sx={{ ml: 1, flex: 1 }}
+                    placeholder="Search"
+                    inputProps={{ "aria-label": "search google maps" }}
+                  />
+                  <IconButton aria-label="delete" size="small">
+                    <SearchIcon fontSize="inherit" />
+                  </IconButton>
+                  <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                  <IconButton sx={{ p: "1px" }} onClick={addNode} size="small">
+                    {adding ? (
+                      <LoopSharpIcon className="animate-spin" />
+                    ) : (
+                      <AddIcon />
+                    )}
+                  </IconButton>
+                </Paper>
+              </div>
             </div>
-            <React.Suspense fallback={<FallBack coverclassname="-none" />}>
+            <React.Suspense fallback={<FallBack coverclassname="p-4" />}>
               {node.children.map((n, i) => (
                 <DocNodeButton key={i} nodeId={n} removeNode={removeNode} />
               ))}

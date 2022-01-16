@@ -52,14 +52,7 @@ export const PathStackSelector = selector<
       );
   },
 });
-const checkMatchStart = (short: string[], long: string[]) => {
-  short.map((s, i) => {
-    if (s !== long[i]) {
-      return false;
-    }
-  });
-  return true;
-};
+
 export function usePopPathStack() {
   const setStack = useSetRecoilState(PathStackState);
   const setNodeSelect = useSetRecoilState(DocNodeSelectState);

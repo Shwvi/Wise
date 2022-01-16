@@ -1,5 +1,6 @@
 import Router from "koa-router";
 import {
+  completeNodeById,
   createNode,
   deleteNodeById,
   findAllNodes,
@@ -83,5 +84,21 @@ nodeRouter
     ctx.body = {
       code: -1,
       message: `Oops, failed to delete node with id ${nodeId}`,
+    };
+  })
+  .get("/complete", async (ctx) => {
+    const { nodeId } = ctx.query;
+    const user = (ctx as any).wise_user;
+    if (nodeId && user) {
+      const res = await completeNodeById(user, nodeId as string);
+      ctx.body = {
+        code: 0,
+        data: res,
+      };
+      return;
+    }
+    ctx.body = {
+      code: -1,
+      message: `Oops, failed to complete node with id ${nodeId}`,
     };
   });

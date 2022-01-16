@@ -19,6 +19,10 @@ export const createMainWindow = () => {
       preload: path.join(__dirname, "../preload.js"),
     },
   });
+  win.webContents.on("new-window", function (e, url) {
+    e.preventDefault();
+    require("electron").shell.openExternal(url);
+  });
   if (isDev) win.loadURL("http://localhost:3000/");
   else {
     const url = require("url").format({

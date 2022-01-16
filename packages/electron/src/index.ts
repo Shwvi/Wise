@@ -29,8 +29,7 @@ app
       }
     });
   })
-  .then(createMainWindow)
-  .then(createPinWindow);
+  .then(createMainWindow);
 
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) createMainWindow();

@@ -50,3 +50,19 @@ body::-webkit-scrollbar {
     background-position: 0% 50%;
   }
 }
+.fade {
+  animation: size-fade 0.5s ease-in-out;
+}
+@keyframes size-fade {
+  0% {
+    transform: skew(-10deg, -10deg);
+    opacity: 0;
+  }
+  100% {
+    transform: skew(0deg, 0deg);
+    opacity: 1;
+  }
+}
+*::-webkit-scrollbar {
+  height: 0;
+}

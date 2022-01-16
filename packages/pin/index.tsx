@@ -49,11 +49,10 @@ function AppGlobalEffect() {
 }
 const LoginOrMain = () => {
   const userInfo = useRecoilValue(UserState);
-  console.log("userInfo", userInfo);
   return (
     <Switch>
       <Route path={"/sign"}>
-        {userInfo ? <Redirect to="/node" /> : <Sign />}
+        {userInfo ? <Redirect to="/pin" /> : <Sign />}
       </Route>
       <Route path={"/pin"}>
         {userInfo ? <Pin /> : <Redirect to="/sign" />}
@@ -73,10 +72,15 @@ const App = () => {
       dispatchInitLoading(false);
     });
   }, []);
+
   return (
     <Router>
-      <div className="w-screen h-screen dark:bg-gray-700 text-white relative bg-gradient dyn-bg">
-        <div className="w-full h-full flex flex-col">
+      <div className="w-screen h-screen text-white relative bg-gradient dyn-bg">
+        {/* <div
+          className="absolute w-full h-full top-0 left-0 opacity-50 bg-gradient dyn-bg"
+          style={{ zIndex: -1 }}
+        ></div> */}
+        <div className="w-full h-full flex flex-col overflow-scroll">
           <React.Suspense fallback={<HomeFallBack />}>
             <div className="flex-1">
               {loading ? <HomeFallBack /> : <LoginOrMain />}

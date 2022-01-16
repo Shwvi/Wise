@@ -19,11 +19,12 @@ import { bindSnackbar } from "./ui/lib/globalMessage";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { dispatchDark } from "./ui/state/dark";
 import { MainHeader } from "./ui/component/MainHeader";
-import { RecoilRoot, useRecoilValue } from "recoil";
-import { UserState } from "./ui/state/core/user";
+import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
+import { SetUserState, UserState } from "./ui/state/core/user";
 import { Sign } from "./ui/page/Sign";
 import { HomeFallBack } from "./ui/component/Fallbacks";
 import { MenuModal } from "./ui/component/MenuModal";
+import { getUserInfo, patchToken } from "./api/request";
 
 const darkTheme = createTheme({
   palette: {
@@ -50,7 +51,16 @@ function AppGlobalEffect() {
   return null;
 }
 const LoginOrMain = () => {
-  const userInfo = useRecoilValue(UserState);
+  const [userInfo, setUserInfo] = useRecoilState(SetUserState);
+  useEffect(() => {
+    if (!userInfo)
+      getUserInfo().then((user) => {
+        if (user) {
+          patchToken(user.token);
+          setUserInfo(user);
+        }
+      });
+  }, []);
 
   return (
     <Switch>

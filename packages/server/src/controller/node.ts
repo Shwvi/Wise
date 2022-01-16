@@ -66,3 +66,15 @@ export async function deleteNodeById(user: User, nodeId: INodeIdentifier) {
   }
   return false;
 }
+export async function completeNodeById(user: User, nodeId: INodeIdentifier) {
+  const res = await findOneNodeById(user, nodeId);
+  if (res) {
+    res.setDataValue("props", {
+      ...res.getDataValue("props"),
+      isCompleted: !res.getDataValue("props").isCompleted,
+    });
+    await res.save();
+    return true;
+  }
+  return false;
+}

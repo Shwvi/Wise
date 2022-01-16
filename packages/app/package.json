@@ -9,6 +9,10 @@
     "build": "webpack"
   },
   "dependencies": {
+    "react-syntax-highlighter": "15.4.5",
+    "@uiw/react-codemirror": "4.3.3",
+    "@codemirror/lang-markdown": "0.19.4",
+    "@codemirror/language-data": "0.19.1",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@geoffcox/react-splitter": "^2.1.1",
@@ -40,6 +44,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/react-syntax-highlighter": "13.5.2",
     "@wise/common": "1.0.0",
     "@types/react-router-transition": "2.1.1",
     "@babel/core": "^7.16.7",

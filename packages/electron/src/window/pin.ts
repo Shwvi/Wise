@@ -9,11 +9,13 @@ export const createPinWindow = () => {
     width: 400,
     height: screens[0].workArea.height,
     // closable: true,
-    frame: false,
-    // resizable: false,
-    // titleBarStyle: "hidden",
+    // frame: false,
+    transparent: true,
+    resizable: true,
+    titleBarStyle: "hidden",
     x: screens[0].workArea.width - 400,
     y: 0,
+    alwaysOnTop: true,
     webPreferences: {
       preload: path.join(__dirname, "../preload.js"),
     },
@@ -28,6 +30,10 @@ export const createPinWindow = () => {
 
     win.loadURL(url);
   }
+  win.webContents.on("new-window", function (e, url) {
+    e.preventDefault();
+    require("electron").shell.openExternal(url);
+  });
   win.webContents.openDevTools();
   const { port1, port2 } = new MessageChannelMain();
   port2.postMessage("ARO_MAIN_CHANNEL");

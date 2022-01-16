@@ -3,7 +3,7 @@ import { getSnackbar } from "../ui/lib/globalMessage";
 import { INode, INodeIdentifier, User } from "@wise/common";
 import { useHistory } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import { UserState, SetUserState } from "@/ui/state/core/user";
+import { SetUserState } from "@/ui/state/core/user";
 
 const WISETOKEN = "__WISETOKEN__";
 const _saver: { wise_token: string | null } = {
@@ -16,12 +16,10 @@ export const patchToken = (token: string) => {
 export const getToken = () => _saver.wise_token;
 export function useLoginOut() {
   const history = useHistory();
-  const setUserState = useSetRecoilState(UserState);
   const setSetUserState = useSetRecoilState(SetUserState);
   return () => {
     localStorage.removeItem(WISETOKEN);
     _saver.wise_token = null;
-    setUserState(null);
     setSetUserState(null);
     history.push("/");
   };
@@ -72,6 +70,10 @@ export const modifyNode = (node: INode) =>
   request.patch<INode, boolean | null>("/node", node);
 export const deleteNode = (nodeId: INodeIdentifier) =>
   request.delete<{ nodeId: INodeIdentifier }, boolean | null>("/node", {
+    params: { nodeId },
+  });
+export const completeNode = (nodeId: INodeIdentifier) =>
+  request.get<{ nodeId: INodeIdentifier }, boolean | null>("/node/complete", {
     params: { nodeId },
   });
 // user

@@ -19,7 +19,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import styles from "./mainheader.less";
-import { UserState } from "../state/core/user";
+import { SetUserState } from "../state/core/user";
 import { useLoginOut } from "@/api/request";
 import { MenuModelOpenState } from "../state/ui/model";
 import { sendMessageToMainProcess } from "@/message";
@@ -52,7 +52,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 export function MainHeader() {
-  const userInfo = useRecoilValue(UserState);
+  const userInfo = useRecoilValue(SetUserState);
   const loginOut = useLoginOut();
   const setMenuModalOpenState = useSetRecoilState(MenuModelOpenState);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(

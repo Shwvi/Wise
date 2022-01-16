@@ -13,6 +13,7 @@ export type User = {
 };
 export type INodeProps = {
   name: string;
+  isCompleted?: boolean;
   content?: string;
   isDeleted?: boolean;
 };
