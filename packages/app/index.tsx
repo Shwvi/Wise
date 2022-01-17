@@ -22,6 +22,7 @@ import { MenuModal } from "./ui/component/MenuModal";
 import { getUserInfo, patchToken } from "./api/request";
 import { AnimatedSwitch } from "react-router-transition";
 import { UserPage } from "./ui/page/User";
+import { ErrorBoundary } from "./ui/component/ErrorBoundary";
 
 const darkTheme = createTheme({
   palette: {
@@ -141,4 +142,9 @@ function ThemeWrapper() {
   );
 }
 
-render(<ThemeWrapper />, document.getElementById("root"));
+render(
+  <ErrorBoundary>
+    <ThemeWrapper />
+  </ErrorBoundary>,
+  document.getElementById("root")
+);

@@ -25,6 +25,7 @@ import { Pin } from "./ui/page/Pin";
 import { IconButton } from "@mui/material";
 import { PushPin, PushPinOutlined } from "@mui/icons-material";
 import { sendAlwaysTop } from "./message/alwaysTop";
+import { ErrorBoundary } from "./ui/component/ErrorBoundary";
 
 const darkTheme = createTheme({
   palette: {
@@ -146,4 +147,9 @@ function ThemeWrapper() {
   );
 }
 
-render(<ThemeWrapper />, document.getElementById("root"));
+render(
+  <ErrorBoundary>
+    <ThemeWrapper />
+  </ErrorBoundary>,
+  document.getElementById("root")
+);
