@@ -1,9 +1,11 @@
+import { PinRes, PinWinCreateMessage } from "@wise/common";
 import { BrowserWindow, MessageChannelMain, screen } from "electron";
 import path from "path";
+import { winMessageEmitter } from "../emitter";
 
 const isDev = process.env.APPENV === "DEV";
 
-export const createPinWindow = () => {
+export const createPinWindow = (initMessage?: PinWinCreateMessage) => {
   const screens = screen.getAllDisplays();
   const win = new BrowserWindow({
     width: 400,
@@ -20,12 +22,14 @@ export const createPinWindow = () => {
       preload: path.join(__dirname, "../preload.js"),
     },
   });
-  if (isDev) win.loadURL("http://localhost:3001/");
-  else {
+  if (isDev) {
+    win.webContents.openDevTools();
+    win.loadURL("http://localhost:3001/");
+  } else {
     const url = require("url").format({
       protocol: "file",
       slashes: true,
-      pathname: require("path").join(__dirname, "../../../pin/dist/index.html"),
+      pathname: require("path").join(__dirname, "../pin/dist/index.html"),
     });
 
     win.loadURL(url);
@@ -34,9 +38,9 @@ export const createPinWindow = () => {
     e.preventDefault();
     require("electron").shell.openExternal(url);
   });
-  win.webContents.openDevTools();
   const { port1, port2 } = new MessageChannelMain();
-  port2.postMessage("ARO_MAIN_CHANNEL");
+  winMessageEmitter.registerPin(port2.postMessage.bind(port2));
+  port2.postMessage(initMessage || "Error no user info get");
   port2.on("message", (event) => {
     const { data } = event;
     const { key, message } = data;
@@ -49,6 +53,12 @@ export const createPinWindow = () => {
       if (message.type === "window-close") {
         win.close();
         return;
+      }
+      if ((message as PinRes).type === "PinRes") {
+        winMessageEmitter.emitMain({
+          key,
+          message,
+        });
       }
     }
   });

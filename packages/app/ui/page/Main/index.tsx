@@ -1,10 +1,9 @@
 import React from "react";
 import { AnimatedSwitch, spring } from "react-router-transition";
 import { Redirect, Route } from "react-router-dom";
-import { Box, CircularProgress, LinearProgress } from "@mui/material";
 import { PathTabs } from "../../component/PathTabs";
 import { Board } from "./Board";
-import { FallBack, LineFallBack } from "../../component/Fallbacks";
+import { FallBack } from "../../component/Fallbacks";
 
 function glide(val: number) {
   return spring(val, {
@@ -12,7 +11,7 @@ function glide(val: number) {
     damping: 24,
   });
 }
-const pageTransitions = {
+export const pageTransitions = {
   atEnter: {
     opacity: 0,
     offset: 100,

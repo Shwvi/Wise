@@ -2,7 +2,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 body::-webkit-scrollbar {
   display: none;
 }
@@ -21,10 +20,27 @@ body::-webkit-scrollbar {
   padding: 0;
   outline: none !important;
 }
-ul {
+.fade {
+  animation: size-fade 0.5s ease-in-out;
+}
+@keyframes size-fade {
+  0% {
+    /* transform: skew(10deg, 10deg); */
+    transform: scaleX(0);
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  100% {
+    /* transform: skew(0, 0); */
+    transform: scaleX(1);
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+.markdown-body ul {
   list-style: circle !important;
 }
-ol {
+.markdown-body ol {
   list-style-type: lower-roman !important;
 }
 .switch-wrapper {

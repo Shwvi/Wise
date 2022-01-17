@@ -19,7 +19,7 @@ function initMainProcessMessageListener() {
       messageEmitter.emit(key, message);
       messageEmitter.removeAllListeners(key);
     });
-    channels.mainProcess.onmessage = (event) => {
+    channels.mainProcess.onmessage = () => {
       // onmessage should be initialized so that
       // listener should work
     };
@@ -27,10 +27,7 @@ function initMainProcessMessageListener() {
     log("Main process port doesn't exist", "Message", "error");
   }
 }
-export function sendMessageToMainProcess<R>(message: {
-  type: string;
-  data?: any;
-}) {
+export function sendMessageToMainProcess<P, R>(message: P) {
   return new Promise<R>((resolve, reject) => {
     const key = uuid();
     const { mainProcess } = channels;

@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env APPENV=DEV webpack serve",
-    "build": "webpack"
+    "build": "webpack && rm -rf ../electron/dist/app/dist && cp -rf ./dist ../electron/dist/app/dist"
   },
   "dependencies": {
     "react-syntax-highlighter": "15.4.5",

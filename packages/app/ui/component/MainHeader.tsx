@@ -17,12 +17,16 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import secret from "../../secret.json";
 
 import styles from "./mainheader.less";
 import { SetUserState } from "../state/core/user";
 import { useLoginOut } from "@/api/request";
 import { MenuModelOpenState } from "../state/ui/model";
 import { sendMessageToMainProcess } from "@/message";
+import { createPinWindow } from "@/message/pinMain";
+import { useHistory } from "react-router-dom";
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
     backgroundColor: "#44b700",
@@ -53,6 +57,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 export function MainHeader() {
   const userInfo = useRecoilValue(SetUserState);
+  const history = useHistory();
   const loginOut = useLoginOut();
   const setMenuModalOpenState = useSetRecoilState(MenuModelOpenState);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -111,7 +116,7 @@ export function MainHeader() {
               <Stack spacing={1}>
                 <Button
                   color="inherit"
-                  // onClick={loginOut}
+                  onClick={() => history.push("/user")}
                   className="w-full text-justify"
                   endIcon={<SettingsIcon />}
                 >
@@ -139,19 +144,29 @@ export function MainHeader() {
             </Box>
           </Popover>
           {userInfo && (
-            <IconButton onClick={handleClick}>
-              <StyledBadge
-                overlap="circular"
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                variant="dot"
+            <>
+              <IconButton onClick={handleClick}>
+                <StyledBadge
+                  overlap="circular"
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  variant="dot"
+                >
+                  <Avatar
+                    alt={userInfo.username}
+                    src={`${__DEV__ ? "http://localhost:8080" : secret.ip}/${
+                      userInfo.props.avatar
+                    }`}
+                    sx={{ width: 32, height: 32 }}
+                  />
+                </StyledBadge>
+              </IconButton>
+              <IconButton
+                onClick={() => createPinWindow(userInfo)}
+                color="inherit"
               >
-                <Avatar
-                  alt={userInfo.username}
-                  src={userInfo.props.avatar}
-                  sx={{ width: 28, height: 28 }}
-                />
-              </StyledBadge>
-            </IconButton>
+                <OpenInNewIcon />
+              </IconButton>
+            </>
           )}
         </Toolbar>
       </AppBar>

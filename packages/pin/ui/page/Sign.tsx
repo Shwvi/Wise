@@ -4,22 +4,21 @@ import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 import KeyboardDoubleArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowLeftOutlined";
 import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useSetRecoilState } from "recoil";
-import { UserState } from "../state/core/user";
-import { patchToken, signUp } from "@/api/request";
+
+import { dispatchUser } from "../state/core/user";
+import { signUp } from "@/api/request";
 
 export function Sign() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const setUserInfo = useSetRecoilState(UserState);
+
   const ref = useRef<HTMLButtonElement | null>(null);
   const trySignIn = useCallback(async () => {
     setLoading(true);
     const user = await signUp(username, password);
     if (user) {
-      patchToken(user.token);
-      setUserInfo(user);
+      dispatchUser(user);
     }
     setLoading(false);
   }, [username, password]);

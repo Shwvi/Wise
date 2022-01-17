@@ -8,6 +8,7 @@ import {
   List,
   ListItemButton,
   Paper,
+  Typography,
 } from "@mui/material";
 import React, { ReactNode, useCallback, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -22,28 +23,26 @@ import { INode } from "@wise/common";
 
 function DocNodeButton({
   nodeId,
-  removeNode,
+  filterText,
 }: {
   nodeId: string;
-  removeNode: (nodeId: string) => Promise<void>;
+  filterText: string;
 }) {
   const node = useRecoilValue(DocNodeState(nodeId));
   const pop = usePopPathStack();
-  return (
+  return node.props.name.includes(filterText) ? (
     <SiderButton onClick={() => pop(node.nodeId)}>
-      <span
-        className={`${node.props.isDeleted ? "text-red-500 line-through" : ""}`}
-      >
-        {node.props.name}
-      </span>
-      {/* <Button
-        color={node.props.isDeleted ? undefined : "error"}
-        onClick={() => removeNode(nodeId)}
-      >
-        {node.props.isDeleted ? "Undel" : "Del"}
-      </Button> */}
+      <Typography variant="button">
+        <span
+          className={`${
+            node.props.isDeleted ? "text-red-500 line-through" : ""
+          }`}
+        >
+          {node.props.name}
+        </span>
+      </Typography>
     </SiderButton>
-  );
+  ) : null;
 }
 function SiderButton(props: { onClick?: () => void; children: ReactNode }) {
   const { onClick, children } = props;
@@ -64,19 +63,6 @@ export function SiderBar({ node }: { node: INode }) {
     ({ set }) =>
       (node: INode) => {
         set(DocNodeState(node.nodeId), node);
-      },
-    []
-  );
-  const delNode = useRecoilCallback(
-    ({ set }) =>
-      (nodeId: string) => {
-        set(DocNodeState(nodeId), (o) => ({
-          ...o,
-          props: {
-            ...o.props,
-            isDeleted: !o.props.isDeleted,
-          },
-        }));
       },
     []
   );
@@ -101,15 +87,7 @@ export function SiderBar({ node }: { node: INode }) {
     }
     setAdding(false);
   }, [node, setNewNode]);
-  const removeNode = useCallback(
-    async (nodeId: string) => {
-      const res = await deleteNode(nodeId);
-      if (res) {
-        delNode(nodeId);
-      }
-    },
-    [delNode]
-  );
+  const [filterText, setFilterTex] = useState("");
   return (
     <Collapse
       orientation="horizontal"
@@ -127,19 +105,28 @@ export function SiderBar({ node }: { node: INode }) {
       >
         {open && (
           <>
-            <div className="w-full flex justify-center">
+            <div className="w-full flex justify-center mb-4">
               <div className="flex items-center w-11/12">
                 <Paper sx={{ display: "flex" }}>
                   <InputBase
+                    onChange={(e) => {
+                      setFilterTex(e.target.value);
+                    }}
+                    value={filterText}
                     sx={{ ml: 1, flex: 1 }}
                     placeholder="Search"
                     inputProps={{ "aria-label": "search google maps" }}
                   />
-                  <IconButton aria-label="delete" size="small">
+                  <IconButton aria-label="delete" size="small" disabled>
                     <SearchIcon fontSize="inherit" />
                   </IconButton>
                   <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                  <IconButton sx={{ p: "1px" }} onClick={addNode} size="small">
+                  <IconButton
+                    sx={{ p: "1px" }}
+                    onClick={addNode}
+                    size="small"
+                    disableRipple
+                  >
                     {adding ? (
                       <LoopSharpIcon className="animate-spin" />
                     ) : (
@@ -151,7 +138,7 @@ export function SiderBar({ node }: { node: INode }) {
             </div>
             <React.Suspense fallback={<FallBack coverclassname="p-4" />}>
               {node.children.map((n, i) => (
-                <DocNodeButton key={i} nodeId={n} removeNode={removeNode} />
+                <DocNodeButton key={i} nodeId={n} filterText={filterText} />
               ))}
             </React.Suspense>
           </>

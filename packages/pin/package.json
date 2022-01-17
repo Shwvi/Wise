@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env APPENV=DEV webpack serve",
-    "build": "webpack"
+    "build": "webpack && cp -rf ./dist ../electron/dist/pin/dist"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",

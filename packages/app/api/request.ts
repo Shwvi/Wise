@@ -4,6 +4,7 @@ import { INode, INodeIdentifier, User } from "@wise/common";
 import { useHistory } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { SetUserState } from "@/ui/state/core/user";
+import secret from "../secret.json";
 
 const WISETOKEN = "__WISETOKEN__";
 const _saver: { wise_token: string | null } = {
@@ -26,7 +27,7 @@ export function useLoginOut() {
 }
 // when error return null
 const request = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: __DEV__ ? "http://localhost:8080" : `${secret.ip}`,
 });
 
 request.interceptors.response.use(
@@ -86,3 +87,5 @@ export const signUp = (username: string, password: string) =>
 export const modifyUser = (newUser: Partial<User>) =>
   request.patch<Partial<User>, boolean | null>("/user", newUser);
 export const deleteUser = () => request.delete<never, boolean | null>("/user");
+export const uploadUserImg = (body: FormData) =>
+  request.post<FormData, string>("/user/uploadimg", body);

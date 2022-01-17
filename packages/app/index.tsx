@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Redirect,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import { render } from "react-dom";
 import { useSnackbar, SnackbarProvider } from "notistack";
 
-import { Main } from "./ui/page/Main";
+import { Main, pageTransitions } from "./ui/page/Main";
 import "./index.css";
 
 import { dispatchInitLoading, useSubScribeInitLoading } from "./ui/state";
@@ -25,6 +20,8 @@ import { Sign } from "./ui/page/Sign";
 import { HomeFallBack } from "./ui/component/Fallbacks";
 import { MenuModal } from "./ui/component/MenuModal";
 import { getUserInfo, patchToken } from "./api/request";
+import { AnimatedSwitch } from "react-router-transition";
+import { UserPage } from "./ui/page/User";
 
 const darkTheme = createTheme({
   palette: {
@@ -60,12 +57,23 @@ const LoginOrMain = () => {
           setUserInfo(user);
         }
       });
-  }, []);
+  }, [setUserInfo, userInfo]);
 
   return (
-    <Switch>
+    <AnimatedSwitch
+      {...pageTransitions}
+      mapStyles={(styles) => ({
+        transform: `translateX(${styles.offset}%)`,
+        height: "100%",
+        width: "100%",
+      })}
+      className="switch-wrapper w-full h-full"
+    >
       <Route path={"/sign"}>
         {userInfo ? <Redirect to="/node" /> : <Sign />}
+      </Route>
+      <Route path={"/user"}>
+        {userInfo ? <UserPage /> : <Redirect to="/sign" />}
       </Route>
       <Route path={"/node"}>
         {userInfo ? <Main /> : <Redirect to="/sign" />}
@@ -73,7 +81,7 @@ const LoginOrMain = () => {
       <Route>
         {userInfo ? <Redirect to="/node" /> : <Redirect to="/sign" />}
       </Route>
-    </Switch>
+    </AnimatedSwitch>
   );
 };
 const App = () => {

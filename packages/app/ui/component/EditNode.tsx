@@ -19,6 +19,7 @@ import { useRecoilCallback } from "recoil";
 import { DocNodeState, usePopPathStack } from "../state/core";
 import { getSnackbar } from "../lib/globalMessage";
 import { INode } from "@wise/common";
+import { pinNewNode } from "@/message/pinMain";
 
 export default function EditNode() {
   const node = useCurrentNode();
@@ -139,6 +140,20 @@ export default function EditNode() {
           key={"Pin"}
           icon={<PushPinIcon />}
           tooltipTitle={"Pin"}
+          onClick={() => {
+            pinNewNode(node)
+              .then(() => {
+                getSnackbar()?.(`Succeed pin`, { variant: "success" });
+              })
+              .catch((e) => {
+                getSnackbar()?.(e.message || `Failed pin`, {
+                  variant: "error",
+                });
+              })
+              .finally(() => {
+                setOpen(false);
+              });
+          }}
         />
         <SpeedDialAction
           onClick={() => setVis(true)}

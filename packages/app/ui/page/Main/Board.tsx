@@ -28,49 +28,8 @@ function ContentEditor({
   }, [node.props.content]);
   return (
     <div className="h-full w-full p-3 overflow-auto">
-      {/* <Divider />
-      <div>
-        {edTit ? (
-          <TextareaAutosize
-            className=" w-full border-none outline-none"
-            defaultValue={node.props.name}
-            onFocus={function (e) {
-              const val = e.target.value;
-              e.target.value = "";
-              e.target.value = val;
-            }}
-            ref={(r) => {
-              r?.focus();
-            }}
-            onBlur={(e) => {
-              const { value } = e.target;
-              if (value.length > 25) {
-                getSnackbar()?.(
-                  `The length of name should not be more than ${25}! `,
-                  { variant: "error" }
-                );
-                setEdTit(false);
-                return;
-              }
-              modifyNode({
-                ...node,
-                props: {
-                  ...node.props,
-                  name: e.target.value,
-                },
-              }).finally(() => {
-                setEdTit(false);
-              });
-            }}
-          />
-        ) : (
-          <div onClick={() => setEdTit(true)}>{node.props.name}</div>
-        )}
-      </div>
-      <div className="mt-4" />
-      <Divider /> */}
       {edCon ? (
-        <div className="mt-1 relative p-1">
+        <div className="mt-1 relative p-1 fade">
           <div className="absolute w-full h-full top-0 left-0 bg-blue-50 dark:bg-gray-900 opacity-70 rounded" />
           <CodeMirror
             autoFocus={true}
@@ -103,7 +62,7 @@ function ContentEditor({
         <div onClick={() => setEdCon((v) => !v)}>
           <ReactMarkdown
             plugins={[remarkGfm]}
-            className="markdown-body"
+            className="markdown-body fade"
             components={{
               a({ href, children }) {
                 const text = children[0];

@@ -14,14 +14,17 @@ import { dispatchInitLoading, useSubScribeInitLoading } from "./ui/state";
 import { setSpeech } from "./ui/lib/speech";
 import { lifeCycler } from "./ui/lib/lifecycle/emitter";
 import { MessageChannelBuild } from "./message";
-import { bindSnackbar } from "./ui/lib/globalMessage";
+import { bindSnackbar, getSnackbar } from "./ui/lib/globalMessage";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { dispatchDark } from "./ui/state/dark";
-import { RecoilRoot, useRecoilValue } from "recoil";
-import { UserState } from "./ui/state/core/user";
+import { RecoilRoot } from "recoil";
+import { useSubScribeUser } from "./ui/state/core/user";
 import { Sign } from "./ui/page/Sign";
 import { HomeFallBack } from "./ui/component/Fallbacks";
 import { Pin } from "./ui/page/Pin";
+import { IconButton } from "@mui/material";
+import { PushPin, PushPinOutlined } from "@mui/icons-material";
+import { sendAlwaysTop } from "./message/alwaysTop";
 
 const darkTheme = createTheme({
   palette: {
@@ -48,7 +51,7 @@ function AppGlobalEffect() {
   return null;
 }
 const LoginOrMain = () => {
-  const userInfo = useRecoilValue(UserState);
+  const userInfo = useSubScribeUser();
   return (
     <Switch>
       <Route path={"/sign"}>
@@ -65,6 +68,7 @@ const LoginOrMain = () => {
 };
 const App = () => {
   const { value: loading } = useSubScribeInitLoading();
+  const [pin, setPin] = useState(true);
   useEffect(() => {
     lifeCycler.registerStart(setSpeech);
     lifeCycler.registerStart(MessageChannelBuild);
@@ -76,10 +80,31 @@ const App = () => {
   return (
     <Router>
       <div className="w-screen h-screen text-white relative bg-gradient dyn-bg">
-        {/* <div
-          className="absolute w-full h-full top-0 left-0 opacity-50 bg-gradient dyn-bg"
-          style={{ zIndex: -1 }}
-        ></div> */}
+        <div className="absolute top-2 right-2">
+          <IconButton
+            onClick={() => {
+              sendAlwaysTop(!pin)
+                .then((d) => {
+                  getSnackbar()?.(`AlwaysTop now is ${d}`, {
+                    variant: "success",
+                  });
+                  setPin(d);
+                })
+                .catch(() => {
+                  getSnackbar()?.(
+                    "Oops, failed to change the alwaysTop state, please try restart app.",
+                    { variant: "error" }
+                  );
+                });
+            }}
+          >
+            {pin ? (
+              <PushPin className="transform rotate-45" />
+            ) : (
+              <PushPinOutlined />
+            )}
+          </IconButton>
+        </div>
         <div className="w-full h-full flex flex-col overflow-scroll">
           <React.Suspense fallback={<HomeFallBack />}>
             <div className="flex-1">

@@ -1,15 +1,37 @@
 {
   "name": "@wise/electron",
-  "version": "1.0.0",
+  "description": "An effective tool",
+  "author": {
+    "name": "Shwvi"
+  },
+  "build": {
+    "productName": "wise",
+    "directories": {
+      "output": "builder"
+    },
+    "appId": "com.electron.wise",
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "files": [
+      "./dist/**/*"
+    ]
+  },
   "main": "dist/index.js",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
     "dev": "nodemon --exec \"cross-env APPENV=DEV electron\" .",
-    "start": "nodemon --exec \"electron\" ."
+    "start": "nodemon --exec \"electron\" .",
+    "pack": "electron-builder --dir",
+    "dist": "rm -rf ./builder && yarn electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "devDependencies": {
+    "electron-builder": "22.14.5",
+    "@wise/common": "1.0.0",
     "electron": "16.0.7",
     "typescript": "4.5.4",
     "nodemon": "2.0.15"

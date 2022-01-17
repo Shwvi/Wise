@@ -1,6 +1,8 @@
 import { User } from "@wise/common";
 import Router from "koa-router";
 import { Model } from "sequelize/dist";
+import fs from "fs";
+import path from "path";
 import {
   createUser,
   deleteUser,
@@ -100,5 +102,40 @@ userRouter
     ctx.body = {
       code: -1,
       message: `Oops, failed to delete user ${user}`,
+    };
+  })
+  .post("/uploadimg", async (ctx) => {
+    const file = (ctx.req as any).files[0];
+    const user: Model<User, User> | null = (ctx as any).wise_user;
+
+    if (file && user) {
+      const { originalname, buffer } = file;
+
+      try {
+        fs.writeFileSync(
+          path.join(__dirname, `../../assets/${originalname}`),
+          buffer
+        );
+        user.setDataValue("props", {
+          ...user.getDataValue("props"),
+          avatar: originalname,
+        });
+        await user.save();
+        ctx.body = {
+          code: 0,
+          data: originalname,
+        };
+        return;
+      } catch (e: any) {
+        ctx.body = {
+          code: -1,
+          message: e.message || `Ooops, failed to write file.`,
+        };
+        return;
+      }
+    }
+    ctx.body = {
+      code: -1,
+      message: `No file or user found`,
     };
   });
