@@ -7,9 +7,20 @@
     "build": "lerna run --parallel build"
   },
   "devDependencies": {
+    "@commitlint/cli": "^16.0.2",
+    "@commitlint/config-conventional": "^16.0.0",
+    "commitizen": "^4.2.4",
+    "conventional-changelog-cli": "^2.2.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^7.0.4",
     "lerna": "^4.0.0"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
