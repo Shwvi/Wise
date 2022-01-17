@@ -48,7 +48,7 @@ export function PinCard({
                 className="markdown-body"
                 components={{
                   a({ href, children }) {
-                    const text = children[0];
+                    const text = children?.[0] || "";
 
                     return (
                       // eslint-disable-next-line react/jsx-no-target-blank

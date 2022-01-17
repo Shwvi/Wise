@@ -65,7 +65,7 @@ function ContentEditor({
             className="markdown-body fade"
             components={{
               a({ href, children }) {
-                const text = children[0];
+                const text = children?.[0] || "";
 
                 return (
                   // eslint-disable-next-line react/jsx-no-target-blank

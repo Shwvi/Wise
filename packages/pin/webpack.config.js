@@ -9,6 +9,7 @@ const { DefinePlugin } = require("webpack");
 const isDev = process.env.APPENV === "DEV";
 
 module.exports = {
+  devtool: "inline-source-map",
   mode: isDev ? "development" : "production",
   entry: {
     app: "./index.tsx",
