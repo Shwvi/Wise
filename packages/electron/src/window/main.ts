@@ -26,8 +26,8 @@ export const createMainWindow = () => {
     e.preventDefault();
     require("electron").shell.openExternal(url);
   });
-  win.webContents.openDevTools();
   if (isDev) {
+    win.webContents.openDevTools();
     win.loadURL("http://localhost:3000/");
   } else {
     const url = require("url").format({

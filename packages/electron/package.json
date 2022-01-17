@@ -5,6 +5,11 @@
     "name": "Shwvi"
   },
   "build": {
+    "fileAssociations": [
+      {
+        "ext": ".icns"
+      }
+    ],
     "productName": "wise",
     "directories": {
       "output": "builder"

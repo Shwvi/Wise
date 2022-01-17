@@ -5,3 +5,5 @@ dist
 secret.json
 .Ds_Store
 builder
+build
+*.afphoto
