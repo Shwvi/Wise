@@ -24,8 +24,8 @@ function ContentEditor({
   const [edCon, setEdCon] = useState(false);
   const code = useRef("");
   useEffect(() => {
-    if (node.props.content) code.current = node.props.content;
-  }, [node.props.content]);
+    code.current = node.props.content || "";
+  }, [node]);
   return (
     <div className="h-full w-full p-3 overflow-auto">
       {edCon ? (
