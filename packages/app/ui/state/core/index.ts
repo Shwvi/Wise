@@ -116,3 +116,5 @@ export const DefaultNodeSelector = selector<INodeIdentifier | null>({
     set(DefaultNodeSelectState, newValue);
   },
 });
+export const removeDefaultNode = () =>
+  localStorage.removeItem(WISEDEFAULTNODEID);

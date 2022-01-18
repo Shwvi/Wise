@@ -33,18 +33,21 @@ export const createMainWindow = () => {
     e.preventDefault();
     require("electron").shell.openExternal(url);
   });
-  if (isDev) {
-    win.webContents.openDevTools();
-    win.loadURL("http://localhost:3000/");
-  } else {
-    const url = require("url").format({
-      protocol: "file",
-      slashes: true,
-      pathname: require("path").join(__dirname, "../app/dist/index.html"),
-    });
+  const loadWin = () => {
+    if (isDev) {
+      win.webContents.openDevTools();
+      win.loadURL("http://localhost:3000/");
+    } else {
+      const url = require("url").format({
+        protocol: "file",
+        slashes: true,
+        pathname: require("path").join(__dirname, "../app/dist/index.html"),
+      });
 
-    win.loadURL(url);
-  }
+      win.loadURL(url);
+    }
+  };
+  loadWin();
   ipcMain.on("request-worker-channel", (event) => {
     if (win.isDestroyed()) return;
     if (event.senderFrame === win.webContents.mainFrame) {
@@ -85,7 +88,10 @@ export const createMainWindow = () => {
             port2.postMessage({ key, message: true });
             return;
           }
-          registerCommonMessage({ message, window: win });
+          if (message.type === "refreshWIndow") {
+            loadWin();
+          }
+          // registerCommonMessage({ message, window: win });
         }
       });
     }

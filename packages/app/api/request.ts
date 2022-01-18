@@ -5,6 +5,7 @@ import { useSetRecoilState } from "recoil";
 import { SetUserState } from "@/ui/state/core/user";
 import secret from "../secret.json";
 import { RefreshWindow_noneres } from "@/message/refresh";
+import { removeDefaultNode } from "@/ui/state/core";
 
 const WISETOKEN = "__WISETOKEN__";
 const _saver: { wise_token: string | null } = {
@@ -22,6 +23,7 @@ export function useLoginOut() {
     localStorage.removeItem(WISETOKEN);
     _saver.wise_token = null;
     setSetUserState(null);
+    removeDefaultNode();
     RefreshWindow_noneres();
   };
 }
