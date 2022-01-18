@@ -14,9 +14,13 @@ export const createMainWindow = () => {
 
     center: true,
     // closable: true,
-    frame: false,
+    // frame: false,
     // resizable: false,
-    // titleBarStyle: "hidden",
+    titleBarStyle: "hidden",
+    trafficLightPosition: {
+      x: 10,
+      y: 15,
+    },
     webPreferences: {
       preload: path.join(__dirname, "../preload.js"),
     },
@@ -45,7 +49,7 @@ export const createMainWindow = () => {
       winMessageEmitter.registerMain(port2.postMessage.bind(port2));
       win.webContents.postMessage("main-world-port", null, [port1]);
       port2.start();
-      port2.on("message", (event) => {
+      port2.on("message", async (event) => {
         const { data } = event;
         const { key, message } = data;
         if (key && message) {
@@ -65,7 +69,7 @@ export const createMainWindow = () => {
             });
           }
           if ((message as PinWinCreateMessage).type === "PinCreate") {
-            createPinWindow(message);
+            await createPinWindow(message); // "Created"
             port2.postMessage({ key, message: true });
             return;
           }

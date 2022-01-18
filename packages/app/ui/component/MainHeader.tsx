@@ -16,8 +16,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import secret from "../../secret.json";
 
 import styles from "./mainheader.less";
@@ -80,16 +78,6 @@ export function MainHeader() {
     <Box sx={{ flexGrow: 1 }} className={`${styles.drag}`}>
       <AppBar position="static">
         <Toolbar variant="dense">
-          <IconButton
-            onClick={() => setMenuModalOpenState(true)}
-            size="medium"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
             variant="h6"
             component="div"
@@ -97,6 +85,7 @@ export function MainHeader() {
               flexGrow: 1,
               font: "italic small-caps bold 20px/2 cursive;",
               letterSpacing: ".3rem",
+              marginLeft: "4rem",
             }}
           >
             Wise
@@ -131,14 +120,12 @@ export function MainHeader() {
                   <span className="text-justify w-full">Login Out</span>
                 </Button>
                 <Button
-                  color="error"
-                  onClick={() => {
-                    sendMessageToMainProcess({ type: "window-close" });
-                  }}
+                  color="info"
+                  onClick={() => setMenuModalOpenState(true)}
                   className="w-full"
-                  endIcon={<CloseRoundedIcon />}
+                  endIcon={<MenuIcon />}
                 >
-                  <span className="text-justify w-full">Close </span>
+                  <span className="text-justify w-full">About </span>
                 </Button>
               </Stack>
             </Box>
@@ -160,12 +147,12 @@ export function MainHeader() {
                   />
                 </StyledBadge>
               </IconButton>
-              <IconButton
+              {/* <IconButton
                 onClick={() => createPinWindow(userInfo)}
                 color="inherit"
               >
                 <OpenInNewIcon />
-              </IconButton>
+              </IconButton> */}
             </>
           )}
         </Toolbar>
