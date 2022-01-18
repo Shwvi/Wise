@@ -46,7 +46,7 @@ export const createMainWindow = () => {
     if (win.isDestroyed()) return;
     if (event.senderFrame === win.webContents.mainFrame) {
       const { port1, port2 } = new MessageChannelMain();
-      winMessageEmitter.registerMain(port2.postMessage.bind(port2));
+      winMessageEmitter.registerMain(port2.postMessage.bind(port2), win);
       win.webContents.postMessage("main-world-port", null, [port1]);
       port2.start();
       port2.on("message", async (event) => {
@@ -63,6 +63,15 @@ export const createMainWindow = () => {
             return;
           }
           if ((message as PinMessage).type === "Pin") {
+            if (
+              !winMessageEmitter.pinWin ||
+              winMessageEmitter.pinWin.isDestroyed()
+            ) {
+              await createPinWindow({
+                type: "PinCreate",
+                data: message.extra,
+              } as PinWinCreateMessage); // "Created"
+            }
             winMessageEmitter.emitPin({
               key,
               message,

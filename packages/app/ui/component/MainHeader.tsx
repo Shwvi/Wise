@@ -22,8 +22,6 @@ import styles from "./mainheader.less";
 import { SetUserState } from "../state/core/user";
 import { useLoginOut } from "@/api/request";
 import { MenuModelOpenState } from "../state/ui/model";
-import { sendMessageToMainProcess } from "@/message";
-import { createPinWindow } from "@/message/pinMain";
 import { useHistory } from "react-router-dom";
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -147,12 +145,6 @@ export function MainHeader() {
                   />
                 </StyledBadge>
               </IconButton>
-              {/* <IconButton
-                onClick={() => createPinWindow(userInfo)}
-                color="inherit"
-              >
-                <OpenInNewIcon />
-              </IconButton> */}
             </>
           )}
         </Toolbar>

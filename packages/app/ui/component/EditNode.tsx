@@ -15,14 +15,16 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import FlagIcon from "@mui/icons-material/Flag";
 import { useCurrentNode } from "@/hook/useCurrentNode";
 import { completeNode, deleteNode, modifyNode } from "@/api/request";
-import { useRecoilCallback } from "recoil";
+import { useRecoilCallback, useRecoilValue } from "recoil";
 import { DocNodeState, usePopPathStack } from "../state/core";
 import { getSnackbar } from "../lib/globalMessage";
 import { INode } from "@wise/common";
 import { pinNewNode } from "@/message/pinMain";
+import { SetUserState } from "../state/core/user";
 
 export default function EditNode() {
   const node = useCurrentNode();
+  const userInfo = useRecoilValue(SetUserState);
   const [open, setOpen] = React.useState(false);
   const [vis, setVis] = useState(false);
 
@@ -111,7 +113,7 @@ export default function EditNode() {
     [changeNode, node]
   );
 
-  if (!node) {
+  if (!node || !userInfo) {
     return null;
   }
   return (
@@ -141,7 +143,7 @@ export default function EditNode() {
           icon={<PushPinIcon />}
           tooltipTitle={"Pin"}
           onClick={() => {
-            pinNewNode(node)
+            pinNewNode(node, userInfo)
               .then(() => {
                 getSnackbar()?.(`Succeed pin`, { variant: "success" });
               })

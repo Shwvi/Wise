@@ -46,7 +46,7 @@ export const createPinWindow = (initMessage?: PinWinCreateMessage) => {
         // the follow should only be triggered once.
         resolve("Created");
         const { port1, port2 } = new MessageChannelMain();
-        winMessageEmitter.registerPin(port2.postMessage.bind(port2));
+        winMessageEmitter.registerPin(port2.postMessage.bind(port2), win);
         win.webContents.postMessage("main-world-port", null, [port1]);
         port2.postMessage(initMessage || "Error no user info get");
         port2.on("message", (event) => {
