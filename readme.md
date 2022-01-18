@@ -59,4 +59,4 @@ yarn workspace @wise/server dev
 
 # Licensen
 
-## GNU General Public License, version 2
+MIT
