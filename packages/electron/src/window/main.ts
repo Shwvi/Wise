@@ -8,6 +8,9 @@ import { registerCommonMessage } from "./common";
 const isDev = process.env.APPENV === "DEV";
 
 export const createMainWindow = () => {
+  if (winMessageEmitter.mainWin && !winMessageEmitter.mainWin.isDestroyed()) {
+    return;
+  }
   const win = new BrowserWindow({
     width: 1000,
     height: 650,
