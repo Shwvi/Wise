@@ -1,6 +1,6 @@
 {
   "name": "@wise/pin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "author": "shwvi",
   "license": "MIT",
@@ -51,7 +51,7 @@
     "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.9.0",
-    "@wise/common": "^0.0.1",
+    "@wise/common": "^0.0.2",
     "babel-loader": "^8.2.3",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^10.2.0",
