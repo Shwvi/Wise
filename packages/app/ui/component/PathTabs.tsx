@@ -11,7 +11,6 @@ import { DocNodeSelectState, PathStackSelector } from "../state/core/index";
 export function PathTabs() {
   const history = useHistory();
   const [nodeId, setNodeId] = useRecoilState(DocNodeSelectState);
-  // const root = useRecoilValue(DocNodeState("0"));
   const [realStack, setRealStack] = useState<
     {
       nodeId: string;
@@ -22,28 +21,33 @@ export function PathTabs() {
   const stackLoadable = useRecoilValueLoadable(PathStackSelector);
   useEffect(() => {
     if (stackLoadable.state === "hasValue") {
-      setRealStack(stackLoadable.contents);
+      if (stackLoadable.contents.length == 0) {
+        setStack([
+          {
+            nodeId: "0",
+            props: {
+              name: "/",
+            },
+          },
+        ]);
+        setRealStack([
+          {
+            nodeId: "0",
+            props: {
+              name: "/",
+            },
+          },
+        ]);
+      } else {
+        setRealStack(stackLoadable.contents);
+      }
     }
-  }, [stackLoadable.contents, stackLoadable.state]);
+  }, [setStack, stackLoadable, stackLoadable.contents, stackLoadable.state]);
 
   const tabIndex = useMemo(() => {
     const idx = realStack.findIndex((n) => n.nodeId === nodeId);
     return idx === -1 ? 0 : idx;
   }, [nodeId, realStack]);
-  useEffect(() => {
-    // when length === 0, init the stack
-    // if not 0, do nothing
-    if (realStack.length === 0) {
-      setStack([
-        {
-          nodeId: "0",
-          props: {
-            name: "/",
-          },
-        },
-      ]);
-    }
-  }, [setStack, realStack.length]);
   const handleChange = useCallback(
     (_: React.SyntheticEvent, newValue: number) => {
       const target = realStack[newValue];

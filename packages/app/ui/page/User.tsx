@@ -12,13 +12,13 @@ import {
 import React, { useCallback, useState } from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import PersonIcon from "@mui/icons-material/Person";
-import { useHistory } from "react-router-dom";
 import { uploadUserImg } from "@/api/request";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import secret from "../../secret.json";
 import { SetUserState } from "../state/core/user";
 import { LoadingButton } from "@mui/lab";
+import { DocNodeSelectState, usePopPathStack } from "../state/core";
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
   const backgroundColor =
@@ -46,10 +46,11 @@ const Input = styled("input")({
   display: "none",
 });
 export function UserPage() {
-  const history = useHistory();
   const userInfo = useRecoilValue(SetUserState);
   const setUser = useSetRecoilState(SetUserState);
   const [loading, setLoading] = useState(false);
+  const selectNodeId = useRecoilValue(DocNodeSelectState);
+  const { pop } = usePopPathStack();
   const upload = useCallback(
     async (file: File) => {
       setLoading(true);
@@ -84,7 +85,9 @@ export function UserPage() {
     <div className="w-full h-full p-4">
       <Breadcrumbs aria-label="breadcrumb">
         <StyledBreadcrumb
-          onClick={() => history.push("/")}
+          onClick={() => {
+            pop(selectNodeId);
+          }}
           component="a"
           href="#"
           label="Home"

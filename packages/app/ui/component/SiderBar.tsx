@@ -29,7 +29,7 @@ function DocNodeButton({
   filterText: string;
 }) {
   const node = useRecoilValue(DocNodeState(nodeId));
-  const pop = usePopPathStack();
+  const { pop } = usePopPathStack();
   return node.props.name.includes(filterText) ? (
     <SiderButton onClick={() => pop(node.nodeId)}>
       <Typography variant="button">

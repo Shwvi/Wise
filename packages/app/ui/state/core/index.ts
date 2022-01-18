@@ -2,6 +2,7 @@ import { findNode } from "@/api/request";
 import { useHistory } from "react-router-dom";
 import { atom, atomFamily, selector, useSetRecoilState } from "recoil";
 import { INode, INodeIdentifier, INodeProps } from "@wise/common";
+import { useCallback } from "react";
 
 export const DocNodeState = atomFamily<INode, INodeIdentifier>({
   key: "DocNodeState",
@@ -57,25 +58,40 @@ export function usePopPathStack() {
   const setStack = useSetRecoilState(PathStackState);
   const setNodeSelect = useSetRecoilState(DocNodeSelectState);
   const history = useHistory();
-  return (id: INodeIdentifier) => {
-    const len = id.split("_").length;
-    setStack((s) => {
-      if (s.length >= len) {
-        if (s[len - 1] === id) {
-          return [...s];
+  const pop = useCallback(
+    (id: INodeIdentifier) => {
+      const parsedId = id.split("_");
+      const len = parsedId.length;
+      setStack((s) => {
+        if (s.length >= len) {
+          if (s[len - 1] === id) {
+            return [...s];
+          }
+          const newS = [];
+          for (let i = 0; i < len - 1; i++) {
+            newS.push(s[i]);
+          }
+          newS.push(id);
+          return newS;
+        } else {
+          // len > s.length
+          // maybe add middle node
+          const newS: INodeIdentifier[] = ["0"];
+          parsedId.reduce((p, c) => {
+            const id = `${p}_${c}`;
+            newS.push(id);
+            return id;
+          });
+          return newS;
         }
-        const newS = [];
-        for (let i = 0; i < len - 1; i++) {
-          newS.push(s[i]);
-        }
-        newS.push(id);
-        return newS;
-      } else {
-        return [...s, id];
-      }
-    });
-    history.push(`/node/${id}`);
-    setNodeSelect(id);
+      });
+      history.push(`/node/${id}`);
+      setNodeSelect(id);
+    },
+    [history, setNodeSelect, setStack]
+  );
+  return {
+    pop,
   };
 }
 
@@ -83,4 +99,20 @@ export const DocNodeSelectState = atom<INodeIdentifier>({
   key: "DocNodeSelectState",
   // root nodeId
   default: "0",
+});
+const WISEDEFAULTNODEID = "__WISE_DEFAULT_NODEID__";
+export const DefaultNodeSelectState = atom<INodeIdentifier | null>({
+  key: "DefaultNodeSelectState",
+  default: localStorage.getItem(WISEDEFAULTNODEID) || null,
+});
+export const DefaultNodeSelector = selector<INodeIdentifier | null>({
+  key: "DefaultNodeSelector",
+  get: ({ get }) => {
+    return get(DefaultNodeSelectState);
+  },
+  set: ({ set }, newValue) => {
+    if (typeof newValue === "string")
+      localStorage.setItem(WISEDEFAULTNODEID, newValue);
+    set(DefaultNodeSelectState, newValue);
+  },
 });

@@ -12,8 +12,9 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 import { modifyNode } from "../../../api/request";
-import { DocNodeState } from "../../state/core";
+import { DocNodeState, usePopPathStack } from "../../state/core";
 import EditNode from "@/ui/component/EditNode";
+import { useParams } from "react-router-dom";
 function ContentEditor({
   node,
   modifyNode,
@@ -98,7 +99,9 @@ function ContentEditor({
   );
 }
 export function Board() {
+  const { nodeId } = useParams<{ nodeId?: string }>();
   const node = useCurrentNode();
+  const { pop } = usePopPathStack();
   const modify = useRecoilCallback(
     ({ set }) =>
       (node: INode) => {
@@ -115,6 +118,11 @@ export function Board() {
     },
     [modify]
   );
+  useEffect(() => {
+    if (nodeId && nodeId !== node?.nodeId) {
+      pop(nodeId);
+    }
+  }, [node?.nodeId, nodeId, pop]);
   if (!node) {
     return (
       <div className="w-full h-full flex justify-center items-center">

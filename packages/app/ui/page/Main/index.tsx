@@ -4,6 +4,8 @@ import { Redirect, Route } from "react-router-dom";
 import { PathTabs } from "../../component/PathTabs";
 import { Board } from "./Board";
 import { FallBack } from "../../component/Fallbacks";
+import { useRecoilValue } from "recoil";
+import { DefaultNodeSelector } from "@/ui/state/core";
 
 function glide(val: number) {
   return spring(val, {
@@ -26,6 +28,7 @@ export const pageTransitions = {
   },
 };
 export function Main() {
+  const defaultNodeId = useRecoilValue(DefaultNodeSelector);
   return (
     <div className="h-full flex flex-col">
       <PathTabs />
@@ -44,7 +47,7 @@ export function Main() {
           </React.Suspense>
         </Route>
         <Route>
-          <Redirect to="/node/0" />
+          <Redirect to={`/node/${defaultNodeId || "0"}`} />
         </Route>
       </AnimatedSwitch>
     </div>
