@@ -1,10 +1,10 @@
 import axios from "axios";
 import { getSnackbar } from "../ui/lib/globalMessage";
 import { INode, INodeIdentifier, User } from "@wise/common";
-import { useHistory } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { SetUserState } from "@/ui/state/core/user";
 import secret from "../secret.json";
+import { RefreshWindow_noneres } from "@/message/refresh";
 
 const WISETOKEN = "__WISETOKEN__";
 const _saver: { wise_token: string | null } = {
@@ -16,13 +16,13 @@ export const patchToken = (token: string) => {
 };
 export const getToken = () => _saver.wise_token;
 export function useLoginOut() {
-  const history = useHistory();
   const setSetUserState = useSetRecoilState(SetUserState);
+
   return () => {
     localStorage.removeItem(WISETOKEN);
     _saver.wise_token = null;
     setSetUserState(null);
-    history.push("/");
+    RefreshWindow_noneres();
   };
 }
 // when error return null

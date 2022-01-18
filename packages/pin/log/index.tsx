@@ -1,4 +1,5 @@
 import chalk from "chalk";
+
 const mapModeToColor: {
   error: "red";
   info: "blue";

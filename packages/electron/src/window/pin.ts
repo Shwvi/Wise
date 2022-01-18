@@ -1,7 +1,8 @@
 import { PinRes, PinWinCreateMessage } from "@wise/common";
-import { BrowserWindow, MessageChannelMain, screen } from "electron";
+import { BrowserWindow, ipcMain, MessageChannelMain, screen } from "electron";
 import path from "path";
 import { winMessageEmitter } from "../emitter";
+import { registerCommonMessage } from "./common";
 
 const isDev = process.env.APPENV === "DEV";
 
@@ -38,30 +39,36 @@ export const createPinWindow = (initMessage?: PinWinCreateMessage) => {
     e.preventDefault();
     require("electron").shell.openExternal(url);
   });
-  const { port1, port2 } = new MessageChannelMain();
-  winMessageEmitter.registerPin(port2.postMessage.bind(port2));
-  port2.postMessage(initMessage || "Error no user info get");
-  port2.on("message", (event) => {
-    const { data } = event;
-    const { key, message } = data;
-    if (key && message) {
-      if (message.type === "ARO-Change-Top") {
-        win.setAlwaysOnTop(message.data);
-        port2.postMessage({ key, message: message.data });
-        return;
-      }
-      if (message.type === "window-close") {
-        win.close();
-        return;
-      }
-      if ((message as PinRes).type === "PinRes") {
-        winMessageEmitter.emitMain({
-          key,
-          message,
-        });
-      }
+  ipcMain.on("request-worker-channel", (event) => {
+    if (win.isDestroyed()) return;
+    if (event.senderFrame === win.webContents.mainFrame) {
+      const { port1, port2 } = new MessageChannelMain();
+      winMessageEmitter.registerPin(port2.postMessage.bind(port2));
+      win.webContents.postMessage("main-world-port", null, [port1]);
+      port2.postMessage(initMessage || "Error no user info get");
+      port2.on("message", (event) => {
+        const { data } = event;
+        const { key, message } = data;
+        if (key && message) {
+          if (message.type === "ARO-Change-Top") {
+            win.setAlwaysOnTop(message.data);
+            port2.postMessage({ key, message: message.data });
+            return;
+          }
+          if (message.type === "window-close") {
+            win.close();
+            return;
+          }
+          if ((message as PinRes).type === "PinRes") {
+            winMessageEmitter.emitMain({
+              key,
+              message,
+            });
+          }
+          registerCommonMessage({ message, window: win });
+        }
+      });
+      port2.start();
     }
   });
-  port2.start();
-  win.webContents.postMessage("main-world-port", null, [port1]);
 };

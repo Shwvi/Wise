@@ -3,12 +3,12 @@ import { ipcRenderer } from "electron";
 // sending the port. We create this promise in the preload so it's guaranteed
 // to register the onload listener before the load event is fired.
 const windowLoaded = new Promise((resolve) => {
+  ipcRenderer.send("request-worker-channel");
+
   window.onload = resolve;
 });
 
 ipcRenderer.on("main-world-port", async (event) => {
   await windowLoaded;
-  // We use regular window.postMessage to transfer the port from the isolated
-  // world to the main world.
   window.postMessage("main-world-port", "*", event.ports);
 });
