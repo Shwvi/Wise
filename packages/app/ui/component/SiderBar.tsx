@@ -9,7 +9,13 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React, { ReactNode, useCallback, useState } from "react";
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import LoopSharpIcon from "@mui/icons-material/LoopSharp";
@@ -25,7 +31,6 @@ import { useRecoilCallback, useRecoilValue } from "recoil";
 import { FallBack } from "./Fallbacks";
 import { INode } from "@wise/common";
 import { useSetCurrentNode } from "@/hook/useCurrentNode";
-import { getSnackbar } from "../lib/globalMessage";
 
 function DocNodeButton({
   nodeId,
@@ -36,23 +41,51 @@ function DocNodeButton({
 }) {
   const node = useRecoilValue(DocNodeState(nodeId));
   const { pop } = usePopPathStack();
+  const [editing, setEditing] = useState(false);
+
   return node.props.name.includes(filterText) ? (
     <SiderButton onClick={() => pop(node.nodeId)}>
       <Typography variant="button">
-        <span
-          className={`${
-            node.props.isDeleted ? "text-red-500 line-through" : ""
-          }`}
-        >
-          {node.props.name}
-        </span>
+        {editing ? (
+          <input
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              e.nativeEvent.stopImmediatePropagation();
+              e.nativeEvent.stopPropagation();
+            }}
+            onBlur={() => {
+              setEditing(false);
+            }}
+            className="p-1"
+            style={{
+              backgroundColor: "rgba(255,255,255,0.1)",
+            }}
+            value={node.props.name}
+          />
+        ) : (
+          <span
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              e.nativeEvent.stopImmediatePropagation();
+              e.nativeEvent.stopPropagation();
+              setEditing(true);
+            }}
+            className={`${
+              node.props.isDeleted ? "text-red-500 line-through" : ""
+            } cursor-text`}
+          >
+            {node.props.name}
+          </span>
+        )}
       </Typography>
     </SiderButton>
   ) : null;
 }
 const SortableItem = SortableElement(
   (props: { nodeId: string; filterText: string }) => (
-    <DocNodeButton {...props} />
+    <DocNodeButton {...props} key={props.nodeId} />
   )
 );
 const SortableList = SortableContainer(
