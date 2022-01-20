@@ -14,7 +14,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import { uploadUserImg } from "@/api/request";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import secret from "../../secret.json";
 import { SetUserState } from "../state/core/user";
 import { LoadingButton } from "@mui/lab";
 import { DocNodeSelectState, usePopPathStack } from "../state/core";
@@ -104,9 +103,7 @@ export function UserPage() {
         <Stack spacing={3} direction="row" className="items-center mt-3">
           <Avatar
             alt={userInfo?.username}
-            src={`${__DEV__ ? "http://localhost:8080" : secret.ip}/${
-              userInfo?.props.avatar
-            }`}
+            src={`http://localhost:8080/${userInfo?.props.avatar}`}
             variant="square"
             sx={{
               width: 56,

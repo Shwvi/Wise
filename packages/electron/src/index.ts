@@ -1,17 +1,22 @@
 // const { logger } = require("./log");
 
-import { app, BrowserWindow, protocol } from "electron";
+import { app, protocol } from "electron";
 import path from "path";
 import fs from "fs";
-
 import { createMainWindow } from "./window/main";
 
 const isDev = process.env.APPENV === "DEV";
 const indexFile = "index.html";
 const indexCss = "index.css";
-
 app
   .whenReady()
+  .then(() => {
+    return new Promise((resolve) => {
+      import("./server").then(({ createServer }) => {
+        createServer().then(resolve);
+      });
+    });
+  })
   .then(() => {
     protocol.interceptFileProtocol("file", (request, callback) => {
       const url = request.url.substr(7); // strip "file://" out of all urls
@@ -42,6 +47,3 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
   // app.quit();
 });
-module.exports = {
-  isDev,
-};

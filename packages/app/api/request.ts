@@ -3,7 +3,6 @@ import { getSnackbar } from "../ui/lib/globalMessage";
 import { INode, INodeIdentifier, User } from "@wise/common";
 import { useSetRecoilState } from "recoil";
 import { SetUserState } from "@/ui/state/core/user";
-import secret from "../secret.json";
 import { RefreshWindow_noneres } from "@/message/refresh";
 import { removeDefaultNode } from "@/ui/state/core";
 
@@ -29,7 +28,7 @@ export function useLoginOut() {
 }
 // when error return null
 const request = axios.create({
-  baseURL: __DEV__ ? "http://localhost:8080" : `${secret.ip}`,
+  baseURL: "http://localhost:8080",
 });
 
 request.interceptors.response.use(

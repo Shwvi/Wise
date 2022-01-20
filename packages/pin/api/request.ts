@@ -2,10 +2,9 @@ import axios from "axios";
 import { getSnackbar } from "../ui/lib/globalMessage";
 import { INode, INodeIdentifier, User } from "@wise/common";
 import { getUser } from "@/ui/state/core/user";
-import secret from "../secret.json";
 // when error return null
 const request = axios.create({
-  baseURL: __DEV__ ? "http://localhost:8080" : secret.ip,
+  baseURL: "http://localhost:8080",
 });
 
 request.interceptors.response.use(

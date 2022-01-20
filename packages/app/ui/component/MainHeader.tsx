@@ -16,7 +16,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
-import secret from "../../secret.json";
 
 import styles from "./mainheader.less";
 import { SetUserState } from "../state/core/user";
@@ -138,9 +137,7 @@ export function MainHeader() {
                 >
                   <Avatar
                     alt={userInfo.username}
-                    src={`${__DEV__ ? "http://localhost:8080" : secret.ip}/${
-                      userInfo.props.avatar
-                    }`}
+                    src={`http://localhost:8080/${userInfo.props.avatar}`}
                     sx={{ width: 32, height: 32 }}
                   />
                 </StyledBadge>
