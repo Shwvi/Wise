@@ -1,4 +1,4 @@
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { DocNodeSelectState, DocNodeState } from "../ui/state/core";
 import { getSnackbar } from "../ui/lib/globalMessage/index";
 export function useCurrentNode() {
@@ -11,4 +11,9 @@ export function useCurrentNode() {
     return null;
   }
   return node;
+}
+export function useSetCurrentNode() {
+  const currentNodeId = useRecoilValue(DocNodeSelectState);
+  const setNode = useSetRecoilState(DocNodeState(currentNodeId));
+  return setNode;
 }

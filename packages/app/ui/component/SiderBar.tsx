@@ -1,6 +1,5 @@
 import { KeyboardArrowDown } from "@mui/icons-material";
 import {
-  Button,
   Collapse,
   Divider,
   IconButton,
@@ -14,12 +13,19 @@ import React, { ReactNode, useCallback, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import LoopSharpIcon from "@mui/icons-material/LoopSharp";
+import {
+  arrayMove,
+  SortableContainer,
+  SortableElement,
+} from "react-sortable-hoc";
 import styles from "./siderbar.less";
 import { DocNodeState, usePopPathStack } from "../state/core";
-import { createNode, deleteNode } from "../../api/request";
+import { createNode, modifyNode } from "../../api/request";
 import { useRecoilCallback, useRecoilValue } from "recoil";
 import { FallBack } from "./Fallbacks";
 import { INode } from "@wise/common";
+import { useSetCurrentNode } from "@/hook/useCurrentNode";
+import { getSnackbar } from "../lib/globalMessage";
 
 function DocNodeButton({
   nodeId,
@@ -44,6 +50,27 @@ function DocNodeButton({
     </SiderButton>
   ) : null;
 }
+const SortableItem = SortableElement(
+  (props: { nodeId: string; filterText: string }) => (
+    <DocNodeButton {...props} />
+  )
+);
+const SortableList = SortableContainer(
+  ({ items, filterText }: { items: string[]; filterText: string }) => {
+    return (
+      <div>
+        {items.map((value, index) => (
+          <SortableItem
+            key={`item-${value}`}
+            index={index}
+            nodeId={value}
+            filterText={filterText}
+          />
+        ))}
+      </div>
+    );
+  }
+);
 function SiderButton(props: { onClick?: () => void; children: ReactNode }) {
   const { onClick, children } = props;
   return (
@@ -59,6 +86,7 @@ function SiderButton(props: { onClick?: () => void; children: ReactNode }) {
 export function SiderBar({ node }: { node: INode }) {
   const [open, setOpen] = useState(true);
   const [adding, setAdding] = useState(false);
+  const setCurrentNode = useSetCurrentNode();
   const setNewNode = useRecoilCallback(
     ({ set }) =>
       (node: INode) => {
@@ -94,6 +122,23 @@ export function SiderBar({ node }: { node: INode }) {
     setAdding(false);
   }, [node, setNewNode]);
   const [filterText, setFilterTex] = useState("");
+  const onSortEnd = useCallback(
+    ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
+      const newNode = {
+        ...node,
+        props: {
+          ...node.props,
+          children: arrayMove(node.props.children, oldIndex, newIndex),
+        },
+      };
+      modifyNode(newNode).then((d) => {
+        if (d) {
+          setCurrentNode(newNode);
+        }
+      });
+    },
+    [node, setCurrentNode]
+  );
   return (
     <Collapse
       orientation="horizontal"
@@ -143,9 +188,12 @@ export function SiderBar({ node }: { node: INode }) {
               </div>
             </div>
             <React.Suspense fallback={<FallBack coverclassname="p-4" />}>
-              {node.props.children.map((n, i) => (
-                <DocNodeButton key={i} nodeId={n} filterText={filterText} />
-              ))}
+              <SortableList
+                items={node.props.children}
+                onSortEnd={onSortEnd}
+                filterText={filterText}
+                distance={1}
+              />
             </React.Suspense>
           </>
         )}

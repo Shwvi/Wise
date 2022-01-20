@@ -10,6 +10,7 @@
     "build": "webpack && rm -rf ../electron/dist/app/dist && cp -rf ./dist ../electron/dist/app/dist"
   },
   "dependencies": {
+    "react-sortable-hoc": "2.0.0",
     "@codemirror/lang-markdown": "0.19.4",
     "@codemirror/language-data": "0.19.1",
     "@emotion/react": "^11.7.1",
