@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm";
 import { SiderBar } from "../../component/SiderBar";
 import { useCurrentNode } from "../../../hook/useCurrentNode";
 import { INode } from "@wise/common";
-import { useRecoilCallback } from "recoil";
+import { useRecoilCallback, useRecoilValue } from "recoil";
 import CodeMirror from "@uiw/react-codemirror";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
@@ -15,6 +15,8 @@ import { modifyNode } from "../../../api/request";
 import { DocNodeState, usePopPathStack } from "../../state/core";
 import EditNode from "@/ui/component/EditNode";
 import { useParams } from "react-router-dom";
+import { pinNewNode } from "@/message/pinMain";
+import { SetUserState } from "@/ui/state/core/user";
 function ContentEditor({
   node,
   modifyNode,
@@ -24,6 +26,7 @@ function ContentEditor({
 }) {
   const [edCon, setEdCon] = useState(false);
   const code = useRef("");
+  const userInfo = useRecoilValue(SetUserState);
   useEffect(() => {
     code.current = node.props.content || "";
   }, [node]);
@@ -39,19 +42,21 @@ function ContentEditor({
               code.current = value;
             }}
             onBlur={() => {
-              modifyNode({
+              const newNode = {
                 ...node,
                 props: {
                   ...node.props,
                   content: code.current,
                 },
-              })
+              };
+              modifyNode(newNode)
                 .catch(() => {
                   code.current = node.props.content || "";
                 })
                 .finally(() => {
                   setEdCon(false);
-                });
+                })
+                .then(() => pinNewNode(newNode, userInfo!, true));
             }}
             value={node.props.content}
             extensions={[

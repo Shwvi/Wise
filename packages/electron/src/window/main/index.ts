@@ -74,6 +74,7 @@ export const createMainWindow = () => {
               !winMessageEmitter.pinWin ||
               winMessageEmitter.pinWin.isDestroyed()
             ) {
+              if (message.weak) return;
               await createPinWindow({
                 type: "PinCreate",
                 data: message.extra,
@@ -88,11 +89,6 @@ export const createMainWindow = () => {
               key,
               message,
             });
-          }
-          if ((message as PinWinCreateMessage).type === "PinCreate") {
-            await createPinWindow(message); // "Created"
-            port2.postMessage({ key, message: true });
-            return;
           }
           if (message.type === "refreshWIndow") {
             loadWin();

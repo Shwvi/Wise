@@ -10,7 +10,7 @@ import { nodeRouter } from "./service/node";
 
 import { userRouter } from "./service/user";
 
-const useLocalDB = !process.env.APPENV;
+const useLocalDB = process.env.APPENV;
 export function createServer() {
   return new Promise((resolve) => {
     const app = new Koa<

@@ -33,6 +33,7 @@ function initMainProcessMessageListener() {
             o.splice(idx, 1, node);
             return [...o];
           }
+          if (message.weak) return [...o];
           return [...o, node];
         });
         channels.mainProcess?.postMessage({

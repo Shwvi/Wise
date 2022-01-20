@@ -8,6 +8,7 @@ import { createMainWindow } from "./window/main";
 const isDev = process.env.APPENV === "DEV";
 const indexFile = "index.html";
 const indexCss = "index.css";
+
 app
   .whenReady()
   .then(() => {

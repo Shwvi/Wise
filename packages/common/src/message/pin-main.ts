@@ -4,6 +4,7 @@ export type PinMessage = {
   type: "Pin";
   data: INode;
   extra: User;
+  weak?: boolean;
 };
 export type PinRes = {
   type: "PinRes";

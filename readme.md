@@ -18,7 +18,7 @@ The main features of wise:
 
 - [ ] Display your plans as tree
 - [ ] Chinese support
-- [ ] Node order changable
+- [x] Node order changable
 - [ ] React markdown plugin to enable more sytnx
 - [ ] Windows and Intel MacOS support
 
