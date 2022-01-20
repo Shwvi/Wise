@@ -1,6 +1,12 @@
 import { findNode } from "@/api/request";
 import { useHistory } from "react-router-dom";
-import { atom, atomFamily, selector, useSetRecoilState } from "recoil";
+import {
+  atom,
+  atomFamily,
+  selector,
+  selectorFamily,
+  useSetRecoilState,
+} from "recoil";
 import { INode, INodeIdentifier, INodeProps } from "@wise/common";
 import { useCallback } from "react";
 
@@ -118,3 +124,18 @@ export const DefaultNodeSelector = selector<INodeIdentifier | null>({
 });
 export const removeDefaultNode = () =>
   localStorage.removeItem(WISEDEFAULTNODEID);
+
+export const selectNodesFromIds = selectorFamily<INode[], INodeIdentifier[]>({
+  key: "selectNodesFromIdsSelect",
+  get:
+    (nodeIds: INodeIdentifier[]) =>
+    async ({ get }) => {
+      const nodes = await Promise.all(
+        nodeIds.map(async (id) => {
+          const node = await get(DocNodeState(id));
+          return node;
+        })
+      );
+      return nodes;
+    },
+});

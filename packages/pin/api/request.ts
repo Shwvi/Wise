@@ -4,7 +4,7 @@ import { INode, INodeIdentifier, User } from "@wise/common";
 import { getUser } from "@/ui/state/core/user";
 // when error return null
 const request = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: `http://localhost:${__DEV__ ? "8080" : "3030"}`,
 });
 
 request.interceptors.response.use(

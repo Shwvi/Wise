@@ -7,15 +7,17 @@ import statics from "koa-static";
 import path from "path";
 import { mountUserRouter } from "./service/mountUser";
 import { nodeRouter } from "./service/node";
+
 import { userRouter } from "./service/user";
 
+const useLocalDB = process.env.APPENV !== "LOCALDB";
 export function createServer() {
   return new Promise((resolve) => {
     const app = new Koa<
       Koa.DefaultState,
       Koa.DefaultContext & { body: any; wise_user?: User }
     >();
-    const port = 8080;
+    const port = useLocalDB ? 8080 : 3030;
     app.use(statics(path.join(__dirname, "../assets")));
     app.use(
       cors({

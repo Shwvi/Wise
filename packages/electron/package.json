@@ -30,6 +30,7 @@
     "watch": "tsc --watch",
     "dev": "nodemon --exec \"cross-env APPENV=DEV electron\" .",
     "start": "nodemon --exec \"electron\" .",
+    "start:localdb": "nodemon --exec \"cross-env APPENV=LOCALDB electron\" .",
     "pack": "electron-builder --dir",
     "dist": "rm -rf ./builder && yarn electron-builder",
     "postinstall": "electron-builder install-app-deps"
