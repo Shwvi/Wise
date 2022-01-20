@@ -68,12 +68,15 @@ export function SiderBar({ node }: { node: INode }) {
   );
   const addNode = useCallback(async () => {
     setAdding(true);
-    const { children, nodeId } = node;
+    const {
+      props: { children },
+      nodeId,
+    } = node;
     const newId = nodeId + `_${children.length}`;
     const newNode = {
       nodeId: newId,
-      children: [],
       props: {
+        children: [],
         name: "untitled",
       },
     };
@@ -82,7 +85,10 @@ export function SiderBar({ node }: { node: INode }) {
       setNewNode(newNode);
       setNewNode({
         ...node,
-        children: [...node.children, newNode.nodeId],
+        props: {
+          ...node.props,
+          children: [...node.props.children, newNode.nodeId],
+        },
       });
     }
     setAdding(false);
@@ -137,7 +143,7 @@ export function SiderBar({ node }: { node: INode }) {
               </div>
             </div>
             <React.Suspense fallback={<FallBack coverclassname="p-4" />}>
-              {node.children.map((n, i) => (
+              {node.props.children.map((n, i) => (
                 <DocNodeButton key={i} nodeId={n} filterText={filterText} />
               ))}
             </React.Suspense>

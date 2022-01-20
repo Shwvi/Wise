@@ -1,7 +1,7 @@
 import { INode } from "@wise/common";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from ".";
-import { UsersModel } from "./users";
+
 const baseConfig = {
   type: DataTypes.STRING,
   allowNull: false,
@@ -12,10 +12,7 @@ export const INodeModel = sequelize.define<Model<INode, INode>, any>(
     nodeId: {
       ...baseConfig,
     },
-    children: {
-      ...baseConfig,
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
+    // children is in prop
     props: {
       ...baseConfig,
       type: DataTypes.JSON,
@@ -29,7 +26,7 @@ export const INodeModel = sequelize.define<Model<INode, INode>, any>(
   }
 );
 
-INodeModel.sync({})
+INodeModel.sync({ force: true })
   .then(() => {
     console.log("INode Model Sync Success!");
   })

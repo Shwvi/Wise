@@ -34,6 +34,9 @@
     "dist": "rm -rf ./builder && yarn electron-builder",
     "postinstall": "electron-builder install-app-deps"
   },
+  "dependencies": {
+    "sqlite3": "5.0.2"
+  },
   "devDependencies": {
     "@wise/common": "^0.0.2",
     "electron": "16.0.7",

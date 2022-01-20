@@ -66,7 +66,7 @@ export const UsersModel = sequelize.define<Model<User, User>, any>(
     freezeTableName: true,
   }
 );
-UsersModel.sync({})
+UsersModel.sync({ force: true })
   .then(() => {
     console.log("User Model Sync Success!");
   })

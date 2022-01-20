@@ -27,7 +27,6 @@ function initMainProcessMessageListener() {
       messageEmitter.removeAllListeners(key);
       if ((message as PinMessage)?.type === "Pin") {
         const node = message.data;
-
         dispatchNodeMap((o) => {
           const idx = o.findIndex((o) => o.nodeId === node.nodeId);
           if (idx !== -1) {

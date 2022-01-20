@@ -16,12 +16,12 @@ export type INodeProps = {
   isCompleted?: boolean;
   content?: string;
   isDeleted?: boolean;
+  children: INodeIdentifier[];
 };
 export type INodeIdentifier = string;
 export type INode = {
   // 0 0_1 0_2_1
   nodeId: INodeIdentifier;
-  children: INodeIdentifier[];
   props: INodeProps;
   // specify for database
   belong_to?: string;

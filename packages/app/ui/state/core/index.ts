@@ -13,8 +13,8 @@ export const DocNodeState = atomFamily<INode, INodeIdentifier>({
     }
     return {
       nodeId: "0",
-      children: [],
       props: {
+        children: [],
         name: "error",
         content: "node not found",
       },

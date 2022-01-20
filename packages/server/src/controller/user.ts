@@ -45,8 +45,8 @@ export async function createUser(user: Pick<User, "username" | "password">) {
       nodeId: "0",
       props: {
         name: "/",
+        children: [],
       },
-      children: [],
       belong_to: newUser.username,
     });
     return createdUser;

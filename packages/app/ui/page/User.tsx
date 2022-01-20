@@ -1,7 +1,6 @@
 import {
   Avatar,
   Breadcrumbs,
-  Button,
   Chip,
   emphasize,
   Paper,

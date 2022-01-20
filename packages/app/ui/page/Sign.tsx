@@ -22,7 +22,7 @@ export function Sign() {
       setUserInfo(user);
     }
     setLoading(false);
-  }, [username, password]);
+  }, [username, password, setUserInfo]);
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       if (e.key === "Enter") {

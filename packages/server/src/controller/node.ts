@@ -32,10 +32,11 @@ export async function createNode(user: User, node: INode) {
     },
   });
   if (parent) {
-    parent.setDataValue("children", [
-      ...parent.getDataValue("children"),
-      res.getDataValue("nodeId"),
-    ]);
+    const parentProps = parent.getDataValue("props");
+    parent.setDataValue("props", {
+      ...parentProps,
+      children: [...parentProps.children, res.getDataValue("nodeId")],
+    });
     await parent.save();
   }
   return res;

@@ -109,8 +109,7 @@ export function PinCard({
   );
 }
 export function Pin() {
-  const { value: nodeIds } = useSubScribeNodeMap();
-
+  const { value: nodes } = useSubScribeNodeMap();
   const compl = useCallback(async (nodeId: INodeIdentifier) => {
     const res = await completeNode(nodeId);
     if (res) {
@@ -140,7 +139,7 @@ export function Pin() {
   return (
     <div className="w-full h-full p-8" style={{ minWidth: 400 }}>
       <Stack spacing={3}>
-        {nodeIds.map((s) => (
+        {nodes.map((s) => (
           <PinCard node={s} key={s.nodeId} compl={compl} unPin={unPin} />
         ))}
       </Stack>

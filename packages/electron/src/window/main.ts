@@ -1,9 +1,8 @@
 import { BrowserWindow, ipcMain, MessageChannelMain } from "electron";
 import path from "path";
-import { PinMessage, PinWinCreateMessage } from "@wise/common";
+import { PinMessage, PinWinCreateMessage, sleep } from "@wise/common";
 import { createPinWindow } from "./pin";
 import { winMessageEmitter } from "../emitter";
-import { registerCommonMessage } from "./common";
 
 const isDev = process.env.APPENV === "DEV";
 
@@ -78,6 +77,11 @@ export const createMainWindow = () => {
                 data: message.extra,
               } as PinWinCreateMessage); // "Created"
             }
+            // sleep here for pin to be ready
+            // the more elegent solution is
+            // to build a message channel and
+            // only send to pin window when it's ready
+            await sleep(1000);
             winMessageEmitter.emitPin({
               key,
               message,
