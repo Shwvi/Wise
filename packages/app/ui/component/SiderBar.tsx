@@ -100,7 +100,7 @@ const SortableList = SortableContainer(
       <div>
         {items.map((value, index) => (
           <SortableItem
-            key={`item-${value}`}
+            key={`item-${value.nodeId}`}
             index={index}
             node={value}
             filterText={filterText}

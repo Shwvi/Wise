@@ -81,6 +81,14 @@ const App = () => {
   return (
     <Router>
       <div className="w-screen h-screen text-white relative bg-gradient dyn-bg">
+        <div
+          className="h-8 w-full absolute top-0 right-0"
+          style={
+            {
+              "-webkit-app-region": "drag",
+            } as any
+          }
+        ></div>
         <div className="absolute top-2 right-2">
           <IconButton
             onClick={() => {

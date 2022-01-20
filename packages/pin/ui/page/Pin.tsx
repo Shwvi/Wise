@@ -13,6 +13,7 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { LoadingButton } from "@mui/lab";
+import { Resizable } from "re-resizable";
 import { completeNode } from "@/api/request";
 
 export function PinCard({
@@ -26,10 +27,16 @@ export function PinCard({
 }) {
   const [loading, setLoading] = useState(false);
   return (
-    <div>
-      <Card className="fade">
-        <Card>
-          <CardContent>
+    <Resizable
+      defaultSize={{
+        height: "300px",
+        width: "100%",
+      }}
+      minHeight={"100px"}
+    >
+      <Card className="fade h-full">
+        <Card className="h-full flex flex-col">
+          <CardContent className="flex-1 flex flex-col overflow-scroll">
             <Typography
               variant="h6"
               // sx={{ fontSize: 14 }}
@@ -38,11 +45,7 @@ export function PinCard({
             >
               {node.props.name}
             </Typography>
-            <Typography
-              variant="body2"
-              style={{ maxHeight: "20rem" }}
-              className="overflow-x-auto"
-            >
+            <Typography variant="body2" className="flex-1 overflow-auto">
               <ReactMarkdown
                 plugins={[remarkGfm]}
                 className="markdown-body"
@@ -105,7 +108,7 @@ export function PinCard({
           </CardActions>
         </Card>
       </Card>
-    </div>
+    </Resizable>
   );
 }
 export function Pin() {
@@ -137,7 +140,7 @@ export function Pin() {
     });
   }, []);
   return (
-    <div className="w-full h-full p-8" style={{ minWidth: 400 }}>
+    <div className="w-full h-full p-10" style={{ minWidth: 400 }}>
       <Stack spacing={3}>
         {nodes.map((s) => (
           <PinCard node={s} key={s.nodeId} compl={compl} unPin={unPin} />

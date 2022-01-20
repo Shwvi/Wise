@@ -163,7 +163,7 @@ export default function EditNode() {
             setPining(true);
             pinNewNode(node, userInfo)
               .then(() => {
-                getSnackbar()?.(`Succeed pin`, { variant: "success" });
+                getSnackbar()?.(`Successfully pin`, { variant: "success" });
               })
               .catch((e) => {
                 getSnackbar()?.(e.message || `Failed pin`, {

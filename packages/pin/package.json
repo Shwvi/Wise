@@ -10,6 +10,7 @@
     "build": "webpack && rm -rf ../electron/dist/pin/dist && cp -rf ./dist ../electron/dist/pin/dist"
   },
   "dependencies": {
+    "re-resizable": "6.9.1",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@geoffcox/react-splitter": "^2.1.1",
