@@ -10,9 +10,12 @@ import {
   test,
   tryLogin,
 } from "../controller/user";
+import { app } from "electron";
 const test_username = (username: string) =>
   /^\w+[\w\s]{3,23}\w$/.test(username);
 export const userRouter = new Router({ prefix: "/user" });
+const prefix = path.join(app.getPath("userData"), "./assets");
+
 userRouter
   .get("/test", async (ctx) => {
     await test();
@@ -112,10 +115,10 @@ userRouter
       const { originalname, buffer } = file;
 
       try {
-        fs.writeFileSync(
-          path.join(__dirname, `../../assets/${originalname}`),
-          buffer
-        );
+        if (!fs.existsSync(prefix)) {
+          fs.mkdirSync(prefix);
+        }
+        fs.writeFileSync(path.join(prefix, `./${originalname}`), buffer);
         user.setDataValue("props", {
           ...user.getDataValue("props"),
           avatar: originalname,

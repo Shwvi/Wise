@@ -103,7 +103,7 @@ export function UserPage() {
         <Stack spacing={3} direction="row" className="items-center mt-3">
           <Avatar
             alt={userInfo?.username}
-            src={`http://localhost:8080/${userInfo?.props.avatar}`}
+            src={`file://assets/${userInfo?.props.avatar}`}
             variant="square"
             sx={{
               width: 56,

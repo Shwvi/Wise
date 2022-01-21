@@ -21,6 +21,11 @@ app
   .then(() => {
     protocol.interceptFileProtocol("file", (request, callback) => {
       const url = request.url.substr(7); // strip "file://" out of all urls
+      if (url.startsWith("assets")) {
+        const realPath = path.join(app.getPath("userData"), url);
+        callback({ path: realPath });
+        return;
+      }
       if (request.url.endsWith(indexFile) || request.url.endsWith(indexCss)) {
         callback({ path: url });
       } else {

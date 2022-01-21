@@ -137,7 +137,7 @@ export function MainHeader() {
                 >
                   <Avatar
                     alt={userInfo.username}
-                    src={`http://localhost:8080/${userInfo.props.avatar}`}
+                    src={`file://assets/${userInfo.props.avatar}`}
                     sx={{ width: 32, height: 32 }}
                   />
                 </StyledBadge>
