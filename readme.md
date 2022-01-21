@@ -14,6 +14,10 @@ The main features of wise:
 2. Markdown support
 3. Pin your plan on your desktop
 
+## Motivation
+
+I always want to have my own note software to mange my mind and life. I have to admit that there are already numberous ones, but there is no one who perfectly meets my anticipation. So, `Wise` came and it was just this.
+
 ## TODO
 
 - [x] Node order changable
@@ -40,7 +44,7 @@ The main features of wise:
 - [x] Drag doesn't work after once drag.
 - [x] Resize the pin card
 - [x] Sync both of the windows
-- [ ] More easy to identify the complete / Muti Radio Button To arhieve
+- [x] More easy to identify the complete / Muti Radio Button To arhieve
 - [ ] Able to restore the pin win
 - [ ] Auto format the markdown
 - [ ] Special component to useHistory
