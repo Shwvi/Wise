@@ -9,7 +9,14 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React, { ReactNode, useCallback, useState } from "react";
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import LoopSharpIcon from "@mui/icons-material/LoopSharp";
@@ -29,6 +36,8 @@ import { useRecoilCallback, useRecoilValue } from "recoil";
 import { FallBack } from "./Fallbacks";
 import { INode, INodeIdentifier } from "@wise/common";
 import { useCurrentNode, useSetCurrentNode } from "@/hook/useCurrentNode";
+import { IToggleButtonGroup } from "./IToggleButtonGroup";
+import { useSubScribeNodeFilterState } from "../state";
 
 function DocNodeButton({
   node,
@@ -39,27 +48,60 @@ function DocNodeButton({
   filterText: string;
   pop: (id: string) => void;
 }) {
+  const setNewNode = useRecoilCallback(
+    ({ set }) =>
+      (node: INode) => {
+        set(DocNodeState(node.nodeId), node);
+      },
+    []
+  );
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [editing, setEditing] = useState(false);
-
+  const [name, setName] = useState(node.props.name);
+  useEffect(() => {
+    setName(node.props.name);
+  }, [node]);
+  useEffect(() => {
+    if (editing) {
+      inputRef.current?.focus();
+    }
+  }, [editing]);
   return node.props.name.includes(filterText) ? (
     <SiderButton onClick={() => pop(node.nodeId)}>
       <Typography variant="button">
         {editing ? (
           <input
+            ref={inputRef}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              e.nativeEvent.stopImmediatePropagation();
-              e.nativeEvent.stopPropagation();
             }}
             onBlur={() => {
-              setEditing(false);
+              const newNode = {
+                ...node,
+                props: {
+                  ...node.props,
+                  name,
+                },
+              };
+              modifyNode(newNode)
+                .then((d) => {
+                  if (d) {
+                    setNewNode(newNode);
+                  }
+                })
+                .finally(() => {
+                  setEditing(false);
+                });
             }}
             className="p-1"
             style={{
               backgroundColor: "rgba(255,255,255,0.1)",
             }}
-            value={node.props.name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            value={name}
           />
         ) : (
           <span
@@ -151,11 +193,25 @@ function NodeButtonList({
     },
     [node, setCurrentNode]
   );
+  const { value: nodeFilter } = useSubScribeNodeFilterState();
+  const realNodes = useMemo(() => {
+    let cur = items;
+    if (!nodeFilter.includes("completed")) {
+      cur = cur.filter((c) => !c.props.isCompleted);
+    }
+    if (!nodeFilter.includes("uncompleted")) {
+      cur = cur.filter((c) => c.props.isCompleted === true);
+    }
+    if (!nodeFilter.includes("deleted")) {
+      cur = cur.filter((c) => c.props.isDeleted !== true);
+    }
+    return cur;
+  }, [items, nodeFilter]);
   if (!node) return <div>Erro No Node selected</div>;
   return (
     <SortableList
       pop={pop}
-      items={items}
+      items={realNodes}
       onSortEnd={onSortEnd}
       filterText={filterText}
       distance={1}
@@ -210,7 +266,7 @@ export function SiderBar({ node }: { node: INode }) {
     >
       <div className="absolute w-full h-full bg-gray-200 opacity-30 dark:bg-black top-0 left-0 border-r-2 border-gray-50"></div>
       <List
-        className={`${styles.ulOverflow}`}
+        className={`${styles.ulOverflow} flex flex-col`}
         sx={{
           minWidth: "14rem",
           maxWidth: "14rem",
@@ -257,15 +313,23 @@ export function SiderBar({ node }: { node: INode }) {
             </React.Suspense>
           </>
         )}
-        <SiderButton onClick={() => setOpen((o) => !o)}>
-          <KeyboardArrowDown
-            sx={{
-              opacity: 1,
-              transform: open ? "rotate(-270deg)" : "rotate(-90deg)",
-              transition: "0.2s",
-            }}
-          />
-        </SiderButton>
+        <div>
+          <SiderButton onClick={() => setOpen((o) => !o)}>
+            <KeyboardArrowDown
+              sx={{
+                opacity: 1,
+                transform: open ? "rotate(-270deg)" : "rotate(-90deg)",
+                transition: "0.2s",
+              }}
+            />
+          </SiderButton>
+        </div>
+        <div className="flex-1" />
+        {open && (
+          <div className="items-end pr-2 pl-2">
+            <IToggleButtonGroup />
+          </div>
+        )}
       </List>
     </Collapse>
   );

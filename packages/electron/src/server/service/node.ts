@@ -58,6 +58,13 @@ nodeRouter
     const node = ctx.request.body as INode;
     const user = (ctx as any).wise_user;
     if (node && user) {
+      if (node.props.name.length > 25) {
+        ctx.body = {
+          code: -1,
+          message: `Oops, failed to modify node with id ${node.nodeId} for the length of node name can't be longer than 25.`,
+        };
+        return;
+      }
       const res = await modifyNode(user, node);
       ctx.body = {
         code: 0,
