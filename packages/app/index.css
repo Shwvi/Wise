@@ -37,12 +37,7 @@ body::-webkit-scrollbar {
     opacity: 1;
   }
 }
-.markdown-body ul {
-  list-style: circle !important;
-}
-.markdown-body ol {
-  list-style-type: lower-roman !important;
-}
+
 .switch-wrapper {
   position: relative;
 }

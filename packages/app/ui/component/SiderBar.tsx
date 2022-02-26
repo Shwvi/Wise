@@ -139,7 +139,7 @@ const SortableList = SortableContainer(
     pop: (id: string) => void;
   }) => {
     return (
-      <div>
+      <div className="overflow-auto">
         {items.map((value, index) => (
           <SortableItem
             key={`item-${value.nodeId}`}

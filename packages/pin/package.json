@@ -39,7 +39,8 @@
     "simple-http-hook": "^1.0.12",
     "stream-browserify": "^3.0.0",
     "url": "^0.11.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "@wise/common": "^0.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
@@ -52,7 +53,6 @@
     "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.9.0",
-    "@wise/common": "^0.0.3",
     "babel-loader": "^8.2.3",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^10.2.0",

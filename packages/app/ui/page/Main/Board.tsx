@@ -1,15 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { SiderBar } from "../../component/SiderBar";
 import { useCurrentNode } from "../../../hook/useCurrentNode";
-import { INode } from "@wise/common";
+import { INode, RenderMarkDown } from "@wise/common";
 import { useRecoilCallback, useRecoilValue } from "recoil";
 import CodeMirror from "@uiw/react-codemirror";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { materialDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 import { modifyNode } from "../../../api/request";
 import { DocNodeState, usePopPathStack } from "../../state/core";
@@ -66,38 +62,7 @@ function ContentEditor({
         </div>
       ) : (
         <div onClick={() => setEdCon((v) => !v)}>
-          <ReactMarkdown
-            plugins={[remarkGfm]}
-            className="markdown-body fade"
-            components={{
-              a({ href, children }) {
-                const text = children?.[0] || "";
-
-                return (
-                  // eslint-disable-next-line react/jsx-no-target-blank
-                  <a href={href} target="_blank">
-                    {text}
-                  </a>
-                );
-              },
-              code({ className, children }) {
-                // Removing "language-" because React-Markdown already added "language-"
-                const language = className
-                  ? className.replace("language-", "")
-                  : "";
-                return (
-                  <SyntaxHighlighter
-                    style={materialDark}
-                    language={language}
-                    // eslint-disable-next-line react/no-children-prop
-                    children={children[0]}
-                  />
-                );
-              },
-            }}
-          >
-            {node.props.content || "*Empty*"}
-          </ReactMarkdown>
+          <RenderMarkDown node={node} />
         </div>
       )}
     </div>
